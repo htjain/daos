@@ -158,6 +158,9 @@ func (cmd *collectLogCmd) Execute(_ []string) error {
 	params.LogFunction = support.CollectDmgCmdEnum
 	params.TargetFolder = cmd.TargetFolder
 	params.LogCmd = "dmg system query"
+	if cmd.cfgCmd.config.TransportConfig.AllowInsecure {
+		params.LogCmd += " -i"
+	}
 
 	err = support.CollectSupportLog(cmd.Logger, params)
 
