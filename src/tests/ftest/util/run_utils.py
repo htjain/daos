@@ -1,8 +1,9 @@
 """
-  (C) Copyright 2022-2023 Intel Corporation.
+  (C) Copyright 2022-2024 Intel Corporation.
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 """
+import os
 import shlex
 import subprocess  # nosec
 import time
@@ -401,6 +402,8 @@ def run_remote(log, hosts, command, verbose=True, timeout=120, task_debug=False,
     task = task_self()
     task.set_info('debug', task_debug)
     task.set_default("stderr", stderr)
+    # Set fan out to the max of the default or number of logical cores
+    task.set_info('fanout', max(task.info('fanout'), len(os.sched_getaffinity(0))))
     # Enable forwarding of the ssh authentication agent connection
     task.set_info("ssh_options", "-oForwardAgent=yes")
     if verbose:
