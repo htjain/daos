@@ -40,7 +40,8 @@ class CsumErrorLog(DaosCoreBase):
                         return device['ctrlr']['health_stats']['checksum_errs']
                 except KeyError as error:
                     self.fail(
-                        'Error parsing dmg storage query device-health output: {}'.format(error))
+                        'Error parsing dmg storage query list-devices --health output: {}'.format(
+                            error))
         return 0
 
     @fail_on(CommandFailure)
@@ -80,7 +81,8 @@ class CsumErrorLog(DaosCoreBase):
                 if not device['uuid']:
                     self.fail('Device uuid undefined')
                 self.log_step(
-                    'Get checksum errors before running the test (dmg storage query device-health)')
+                    'Get checksum errors before running the test (dmg storage query list-devices '
+                    '--health)')
                 check_sum = self.get_checksum_error_value(dmg, device['uuid'])
                 dmg.copy_certificates(get_log_file("daosCA/certs"), self.hostlist_clients)
                 dmg.copy_configuration(self.hostlist_clients)
@@ -89,7 +91,8 @@ class CsumErrorLog(DaosCoreBase):
                 self.run_subtest()
                 test_run = True
                 self.log_step(
-                    'Get checksum errors after running the test (dmg storage query device-health)')
+                    'Get checksum errors after running the test (dmg storage query list-devices '
+                    '--health)')
                 check_sum_latest = self.get_checksum_error_value(dmg, device['uuid'])
                 self.log.info('Checksum Errors after:  %d', check_sum_latest)
                 self.assertTrue(check_sum_latest > check_sum, 'Checksum Error Log not incremented')

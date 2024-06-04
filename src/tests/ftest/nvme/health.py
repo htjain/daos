@@ -26,7 +26,7 @@ class NvmeHealth(ServerFillUp):
         Test Description: Test Health monitor for large number of pools.
         Use Case: This test creates many pools and verifies the following command behavior:
             dmg storage query list-pools
-            dmg storage query device-health
+            dmg storage query list-devices --health
             dmg storage scan --nvme-health
 
         :avocado: tags=all,full_regression
@@ -149,8 +149,8 @@ class NvmeHealth(ServerFillUp):
                                     error))
         if errors:
             self.fail(
-                'Detected {} error(s) verifying dmg storage query device-health output'.format(
-                    errors))
+                'Detected {} error(s) verifying dmg storage query list-devices --health output'.
+                format(errors))
 
         # Get the nvme-health
         try:

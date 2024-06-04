@@ -358,19 +358,20 @@ class DmgCommand(DmgCommandBase):
             new_uuid=new_uuid, no_reint=no_reint)
 
     def storage_query_device_health(self, uuid):
-        """Get the result of the 'dmg storage query device-health' command.
+        """Get the result of the 'dmg storage query list-devices --health' command.
 
         Args:
             uuid (str): Device UUID to query.
 
         Raises:
-            CommandFailure: if the dmg storage query device-health command fails.
+            CommandFailure: if the dmg storage query list-devices --health command fails.
 
         Returns:
             dict: the dmg json command output converted to a python dictionary
 
         """
-        return self._get_json_result(("storage", "query", "device-health"), uuid=uuid)
+        return self._get_json_result(
+            ("storage", "query", "list-device", "--health"), uuid=uuid)
 
     def storage_scan_nvme_health(self):
         """Get the result of the 'dmg storage scan --nvme-health' command.
