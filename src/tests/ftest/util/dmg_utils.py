@@ -371,7 +371,7 @@ class DmgCommand(DmgCommandBase):
 
         """
         return self._get_json_result(
-            ("storage", "query", "list-device", "--health"), uuid=uuid)
+            ("storage", "query", "list-device"), uuid=uuid, health=True)
 
     def storage_scan_nvme_health(self):
         """Get the result of the 'dmg storage scan --nvme-health' command.
