@@ -381,7 +381,8 @@ def run_local(log, command, capture_output=True, timeout=None, check=False, verb
     return result
 
 
-def run_remote(log, hosts, command, verbose=True, timeout=120, task_debug=False, stderr=False):
+def run_remote(log, hosts, command, verbose=True, timeout=120, task_debug=False, stderr=False,
+               fanout=None):
     """Run the command on the remote hosts.
 
     Args:
@@ -393,6 +394,8 @@ def run_remote(log, hosts, command, verbose=True, timeout=120, task_debug=False,
             Defaults to 120 seconds.
         task_debug (bool, optional): whether to enable debug for the task object. Defaults to False.
         stderr (bool, optional): whether to enable stdout/stderr separation. Defaults to False.
+        fanout (int, optional): fanout to use. Default uses the max of the
+            clush default (64) or available cores
 
     Returns:
         RemoteCommandResult: a grouping of the command results from the same hosts with the same
@@ -403,7 +406,9 @@ def run_remote(log, hosts, command, verbose=True, timeout=120, task_debug=False,
     task.set_info('debug', task_debug)
     task.set_default("stderr", stderr)
     # Set fan out to the max of the default or number of logical cores
-    task.set_info('fanout', max(task.info('fanout'), len(os.sched_getaffinity(0))))
+    if fanout is None:
+        fanout = max(task.info('fanout'), len(os.sched_getaffinity(0)))
+    task.set_info('fanout', fanout)
     # Enable forwarding of the ssh authentication agent connection
     task.set_info("ssh_options", "-oForwardAgent=yes")
     if verbose:
